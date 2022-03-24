@@ -25,3 +25,15 @@ func Each[T any](items []T, eachFunction func(item T)) {
 		eachFunction(item)
 	}
 }
+
+func Filter[T any](items []T, filterFunction func(item T) bool) []T {
+	var result []T
+
+	for _, item := range items {
+		if filterFunction(item) {
+			result = append(result, item)
+		}
+	}
+
+	return result
+}

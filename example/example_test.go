@@ -43,4 +43,14 @@ var _ = Describe("Example Go Generics", func() {
 
 		Expect(added).To(Equal([]int{2, 3, 4, 5}))
 	})
+
+	It("can filter", func() {
+		numbers := []int{1, 2, 3, 4}
+
+		result := slice.Filter(numbers, func(number int) bool {
+			return number > 2
+		})
+
+		Expect(result).To(Equal([]int{3, 4}))
+	})
 })
