@@ -48,11 +48,11 @@ var _ = Describe("Example Go Generics", func() {
 	It("can reduce to a different type", func() {
 		numbers := []int{1, 2, 3, 4}
 
-		sum := func(item int, result string) string {
+		append := func(item int, result string) string {
 			return result + fmt.Sprintf("%v", item)
 		}
 
-		result := slice.Reduce(numbers, sum)
+		result := slice.Reduce(numbers, append)
 
 		Expect(result).To(Equal("1234"))
 	})
