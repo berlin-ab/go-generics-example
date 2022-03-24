@@ -1,7 +1,7 @@
 package slice
 
-func Map[T any](items []T, mappingFunction func(item T) T) []T {
-	var result []T
+func Map[InType any, OutType any](items []InType, mappingFunction func(item InType) OutType) []OutType {
+	var result []OutType
 
 	for _, item := range items {
 		result = append(result, mappingFunction(item))
@@ -10,8 +10,8 @@ func Map[T any](items []T, mappingFunction func(item T) T) []T {
 	return result
 }
 
-func Reduce[T any](items []T, reduceFunction func(item T, sum T) T) T {
-	var result T
+func Reduce[InType any, OutType any](items []InType, reduceFunction func(item InType, sum OutType) OutType) OutType {
+	var result OutType
 
 	for _, item := range items {
 		result = reduceFunction(item, result)

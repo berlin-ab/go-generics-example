@@ -1,6 +1,7 @@
 package example_test
 
 import (
+	"fmt"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 
@@ -20,6 +21,18 @@ var _ = Describe("Example Go Generics", func() {
 		Expect(doubled).To(Equal([]int{2, 4, 6, 8}))
 	})
 
+	It("can map to a different type", func() {
+		numbers := []int{1, 2, 3, 4}
+
+		stringify := func(item int) string {
+			return fmt.Sprintf("%v", item)
+		}
+
+		strings := slice.Map(numbers, stringify)
+
+		Expect(strings).To(Equal([]string{"1", "2", "3", "4"}))
+	})
+
 	It("can reduce", func() {
 		numbers := []int{1, 2, 3, 4}
 
@@ -30,6 +43,18 @@ var _ = Describe("Example Go Generics", func() {
 		result := slice.Reduce(numbers, sum)
 
 		Expect(result).To(Equal(10))
+	})
+
+	It("can reduce to a different type", func() {
+		numbers := []int{1, 2, 3, 4}
+
+		sum := func(item int, result string) string {
+			return result + fmt.Sprintf("%v", item)
+		}
+
+		result := slice.Reduce(numbers, sum)
+
+		Expect(result).To(Equal("1234"))
 	})
 
 	It("can each", func() {
