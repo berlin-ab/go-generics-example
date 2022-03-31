@@ -1,6 +1,8 @@
 package slice
 
-func Map[InType any, OutType any](items []InType, mappingFunction func(item InType) OutType) []OutType {
+type mappingFunctionDefinition[InType any, OutType any] func(item InType) OutType
+
+func Map[InType any, OutType any](items []InType, mappingFunction mappingFunctionDefinition[InType, OutType]) []OutType {
 	var result []OutType
 
 	for _, item := range items {
@@ -56,7 +58,7 @@ func (p *pipeline[T]) Filter(filterFunc func(item T) bool) *pipeline[T] {
 // The Go compiler cannot handle type declarations inside generic functions or methods.
 //We hope to provide support for this feature in a future release.
 //func (p *pipeline[T]) Map[F any](mapFunc func(T) F) *pipeline[F] {
-func (p *pipeline[T]) Map(mapFunc func(T) T) *pipeline[T] {
+func (p *pipeline[T]) Map(mapFunc mappingFunctionDefinition[T, T]) *pipeline[T] {
 	return Pipeline(Map(p.items, mapFunc))
 }
 
