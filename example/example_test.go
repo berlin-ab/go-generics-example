@@ -79,6 +79,25 @@ var _ = Describe("Example Go Generics", func() {
 		Expect(result).To(Equal([]int{3, 4}))
 	})
 
+	It("can pipeline without library help", func() {
+		numbers := []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+
+		selectEvens := func(item int) bool {
+			return (item % 2) == 0
+		}
+
+		double := func(item int) int {
+			return item * 2
+		}
+
+		// The order of operations reads deepest to top-most
+		result := slice.Map(
+			slice.Filter(numbers, selectEvens),
+			double)
+
+		Expect(result).To(Equal([]int{4, 8, 12, 16, 20}))
+	})
+
 	It("can pipeline with same types", func() {
 		numbers := []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
 
