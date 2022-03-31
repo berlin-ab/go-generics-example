@@ -37,3 +37,23 @@ func Filter[T any](items []T, filterFunction func(item T) bool) []T {
 
 	return result
 }
+
+type pipeline[T any] struct {
+	items []T
+}
+
+func Pipeline[T any](items []T) *pipeline[T] {
+	return &pipeline[T]{items: items}
+}
+
+func (p *pipeline[T]) Filter(filterFunc func(item T) bool) *pipeline[T] {
+	return Pipeline[T](Filter(p.items, filterFunc))
+}
+
+func (p *pipeline[T]) Map(mapFunc func(item T) T) *pipeline[T] {
+	return Pipeline(Map(p.items, mapFunc))
+}
+
+func (p *pipeline[T]) Collect() []T {
+	return p.items
+}

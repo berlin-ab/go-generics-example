@@ -78,4 +78,23 @@ var _ = Describe("Example Go Generics", func() {
 
 		Expect(result).To(Equal([]int{3, 4}))
 	})
+
+	It("can pipeline", func() {
+		numbers := []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+
+		selectEvens := func(item int) bool {
+			return (item % 2) == 0
+		}
+
+		double := func(item int) int {
+			return item * 2
+		}
+
+		result := slice.Pipeline(numbers).
+			Filter(selectEvens).
+			Map(double).
+			Collect()
+
+		Expect(result).To(Equal([]int{4, 8, 12, 16, 20}))
+	})
 })
