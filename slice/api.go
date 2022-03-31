@@ -10,7 +10,9 @@ func Map[InType any, OutType any](items []InType, mappingFunction func(item InTy
 	return result
 }
 
-func Reduce[InType any, OutType any](items []InType, reduceFunction func(item InType, sum OutType) OutType) OutType {
+type reduceFunctionDefinition[InType any, OutType any] func(item InType, sum OutType) OutType
+
+func Reduce[InType any, OutType any](items []InType, reduceFunction reduceFunctionDefinition[InType, OutType]) OutType {
 	var result OutType
 
 	for _, item := range items {
@@ -50,8 +52,18 @@ func (p *pipeline[T]) Filter(filterFunc func(item T) bool) *pipeline[T] {
 	return Pipeline[T](Filter(p.items, filterFunc))
 }
 
-func (p *pipeline[T]) Map(mapFunc func(item T) T) *pipeline[T] {
+// https://go.dev/doc/go1.18
+// The Go compiler cannot handle type declarations inside generic functions or methods.
+//We hope to provide support for this feature in a future release.
+//func (p *pipeline[T]) Map[F any](mapFunc func(T) F) *pipeline[F] {
+func (p *pipeline[T]) Map(mapFunc func(T) T) *pipeline[T] {
 	return Pipeline(Map(p.items, mapFunc))
+}
+
+func (p *pipeline[T]) Reduce(reduceFunc reduceFunctionDefinition[T, T]) T {
+	var result T
+	result = Reduce(p.items, reduceFunc)
+	return result
 }
 
 func (p *pipeline[T]) Collect() []T {

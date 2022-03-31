@@ -79,7 +79,7 @@ var _ = Describe("Example Go Generics", func() {
 		Expect(result).To(Equal([]int{3, 4}))
 	})
 
-	It("can pipeline", func() {
+	It("can pipeline with same types", func() {
 		numbers := []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
 
 		selectEvens := func(item int) bool {
@@ -97,4 +97,49 @@ var _ = Describe("Example Go Generics", func() {
 
 		Expect(result).To(Equal([]int{4, 8, 12, 16, 20}))
 	})
+
+	It("can reduce a pipeline with same types", func() {
+		numbers := []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+
+		selectEvens := func(item int) bool {
+			return (item % 2) == 0
+		}
+
+		double := func(item int) int {
+			return item * 2
+		}
+
+		result := slice.Pipeline(numbers).
+			Filter(selectEvens).
+			Map(double).
+			Reduce(func(item int, sum int) int {
+				return sum + item
+			})
+
+		Expect(result).To(Equal(60))
+	})
+
+	//It("can pipeline with changing types", func() {
+	//	numbers := []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+	//
+	//	selectEvens := func(item int) bool {
+	//		return (item % 2) == 0
+	//	}
+	//
+	//	double := func(item int) int {
+	//		return item * 2
+	//	}
+	//
+	//	stringify := func(item int) string {
+	//		return ""
+	//	}
+	//
+	//	result := slice.Pipeline(numbers).
+	//		Filter(selectEvens).
+	//		Map(double).
+	//		Map(stringify).
+	//		Collect()
+	//
+	//	Expect(result).To(Equal([]string{"4", "8", "12", "16", "20"}))
+	//})
 })
